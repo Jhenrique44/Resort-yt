@@ -9,7 +9,7 @@ function RoomContainer({context}){
 
     if(loading){
         return(
-            <Loading></Loading>
+            <Loading />
         )
     }
     return(

@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-// import items from './data';
+import items from './data';
 import Client from './Contentful'
 
 
 const RoomContext = React.createContext()
 
-class RoomProvider extends Component {
+export default class RoomProvider extends Component {
     
     state = {
         rooms: [],
@@ -28,8 +28,8 @@ class RoomProvider extends Component {
     getData = async () => {
         try {
             let response = await Client.getEntries({
-                content_type:"beachResortRoom",
-                order: "sys.createdAt"
+                content_type:"beachResortRoom"
+                // order: "sys.createdAt"
             });
             let rooms = this.formatData(response.items);
             let featuredRooms = rooms.filter(room => room.featured === true);
@@ -52,7 +52,23 @@ class RoomProvider extends Component {
     }
     componentDidMount(){
      
-        this.getData();
+        // this.getData();
+        let rooms = this.formatData(items);
+        let featuredRooms = rooms.filter(room => room.featured === true);
+
+        let maxPrice = Math.max(...rooms.map(item => item.price));
+        let maxSize = Math.max(...rooms.map(item => item.size))
+
+        this.setState({
+            rooms, 
+            featuredRooms,
+            sortedRooms: rooms,
+            loading: false,
+            price: maxPrice,
+            maxPrice,
+            maxSize
+        });
+  
     }
 
     formatData(items){
@@ -65,7 +81,7 @@ class RoomProvider extends Component {
         });
         return tempItems;
     }
-    getRoom = ( slug ) => {
+    getRoom =  slug => {
         let tempRooms = [...this.state.rooms];
         const room = tempRooms.find(room => room.slug === slug);
 
@@ -76,12 +92,12 @@ class RoomProvider extends Component {
         const target = event.target
 
         const value = target.type === 'checkbox' ? target.checked : target.value
-        const name =  event.target.name;
+        const name = target.name;
         this.setState({
             [name] : value
         }, 
         this.filterRooms
-        )
+        );
     }
     filterRooms = () => {
         let {
@@ -89,8 +105,8 @@ class RoomProvider extends Component {
             type,
             capacity, 
             price,
-            minPrice,
-            maxPrice,
+            // minPrice,
+            // maxPrice,
             minSize,
             maxSize,
             breakfast,
@@ -127,7 +143,7 @@ class RoomProvider extends Component {
         this.setState({
             sortedRooms: tempRooms
 
-        })
+        });
     }
 
     render() {
@@ -147,13 +163,14 @@ class RoomProvider extends Component {
 
 const RoomConsumer = RoomContext.Consumer;
 
+export{RoomProvider, RoomConsumer, RoomContext}
+
 export function withRoomConsumer(Component){
     return function ConsumerWrapper(props){
-        return <RoomConsumer>
+        return( 
+        <RoomConsumer>
             {value => <Component {...props} context={value}/>}
         </RoomConsumer>
-
+        );
     }
 }
-
-export{RoomProvider, RoomConsumer, RoomContext}

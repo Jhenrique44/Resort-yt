@@ -1,15 +1,13 @@
 import React from 'react'
 import Room from './Room'
 
-export default function RoomList({rooms}) {
+const RoomsList = ({rooms}) => {
     if(rooms.lenght === 0){
         return(
             <div className="empty-search">
-                <h3>
-                    unfortunately no rooms matched your search parameters
-                </h3>
+                <h3>unfortunately no rooms matched your search parameters</h3>
             </div>
-        )
+        );
     }
     return (
         <section className="roomslist">
@@ -25,3 +23,5 @@ export default function RoomList({rooms}) {
         </section>
     )
 }
+
+export default RoomsList;

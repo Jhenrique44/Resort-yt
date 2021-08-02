@@ -6,7 +6,7 @@ import Title from '../components/Title'
 const getUnique = (items, value) => {
     return [...new Set(items.map(item => item[value]))];
 }
-export default function RoomFilter({rooms}) {
+const RoomsFilter = ({rooms}) => {
 
     const context = useContext(RoomContext);
     const {
@@ -27,22 +27,20 @@ export default function RoomFilter({rooms}) {
     //add all
     types = ["all", ...types];
     //map to JSX
-    types = types.map((item, index) =>{
-        return( 
-            <option value = {item} key={index}>
-                {item}
-            </option>
-        );
-    });
-    
+    types = types.map((item, index) => (
+     
+        <option key={index} value={item}>
+            {item}
+        </option>
+
+    ));
+    //get unique capacity
     let people = getUnique(rooms, 'capacity');
-    people = people.map((item, index) => {
-        return(
-            <option key={index} value={item}>
-                {item}
-            </option>
-        )
-    })
+    people = people.map((item, index) => (
+        <option key={index} value={item}>
+            {item}
+        </option>
+    ));
 
     return (
         <section className="filter-container">
@@ -51,24 +49,26 @@ export default function RoomFilter({rooms}) {
                 {/* select type */}
                 <div className="form-group">
                     <label htmlFor="type">room type</label>
-                    <select name="type"
+                    <select 
+                        name="type"
                         id="type" 
-                        value={type} 
-                        className="form-control" 
                         onChange={handleChange}
+                        className="form-control" 
+                        value={type}
                     >
                         {types}       
                     </select>
                 </div>
-                {/* end select type */}
+                {/* end of select type */}
                 {/* guests type */}
                 <div className="form-group">
                     <label htmlFor="capacity">Guests</label>
-                    <select name="capacity"
+                    <select
+                        name="capacity"
                         id="capacity" 
-                        value={capacity} 
-                        className="form-control" 
                         onChange={handleChange}
+                        className="form-control"
+                        value={capacity}  
                     >
                         {people}       
                     </select>
@@ -76,13 +76,12 @@ export default function RoomFilter({rooms}) {
                 {/* end guests type */}
                 {/* begin Room price */}
                 <div className="form-group">
-                    <label htmlFor="price">
-                        room price ${price}
-                    </label>
-                    <input type="range" 
+                    <label htmlFor="price">room price ${price}</label>
+                    <input 
+                        type="range" 
                         name="price" 
                         min={minPrice} 
-                        maxPrice={maxPrice}
+                        max={maxPrice}
                         id="price"
                         value={price}
                         onChange={handleChange}
@@ -92,18 +91,18 @@ export default function RoomFilter({rooms}) {
                 {/* end room price */}
                 {/* size */}
                 <div className="form-group">
-                    <label htmlFor="size">room size</label>
+                    <label htmlFor="price">room size</label>
                     <div className="size-inputs">
-                        <input type="number"
+                        <input 
+                            type="number"
                             name="minSize"
-                            id="size"
                             value={minSize}
                             onChange={handleChange}
                             className="size-input"
                         />
-                        <input type="number"
+                        <input 
+                            type="number"
                             name="maxSize"
-                            id="size"
                             value={maxSize}
                             onChange={handleChange}
                             className="size-input"
@@ -114,22 +113,23 @@ export default function RoomFilter({rooms}) {
                 {/* extras */}
                 <div className="form-group">
                     <div className="single-extra">
-                        <input type="checkbox" 
-                                name="breakfast" 
-                                id="breakfast"
-                                checked={breakfast}
-                                onChange={handleChange}
+                        <input 
+                            type="checkbox" 
+                            name="breakfast" 
+                            id="breakfast"
+                            checked={breakfast}
+                            onChange={handleChange}
                         />
                         <label htmlFor="breakfast">breakfast</label>
                     </div>
                     <div className="single-extra">
-                        <input type="checkbox" 
-                                name="pets" 
-                                id="pets"
-                                checked={pets}
-                                onChange={handleChange}
+                        <input 
+                            type="checkbox" 
+                            name="pets" 
+                            checked={pets}
+                            onChange={handleChange}
                         />
-                        <label htmlFor="pets">pets</label>
+                        <label htmlFor="breakfast">pets</label>
                     </div>
                 </div>
                 {/* end extras */}
@@ -137,3 +137,4 @@ export default function RoomFilter({rooms}) {
         </section>
     )
 }
+export default RoomsFilter;
